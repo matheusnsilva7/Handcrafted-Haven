@@ -3,7 +3,8 @@
 Matheus Silva, 
 Jose Luis Izelo Mabarak, 
 Esteban Spitale, 
-Schnaider Jean Louis
+Schnaider Jean Louis,
+Bryan Wesley Santana
 
 Color schema/theme: blue - #0b23d5, White - #ffffff
 
