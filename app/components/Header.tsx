@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, User } from "lucide-react";
+import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,87 +37,63 @@ export default function Header() {
         className="container flex-between"
         style={{
           height: scrolled ? "65px" : "80px",
-          transition: "all 0.3s ease",
         }}
       >
         {/* LOGO */}
         <h1
           style={{
             fontSize: "1.5rem",
-            fontWeight: "600",
-            letterSpacing: "1px",
             color: "var(--color-primary)",
             margin: 0,
-            transition: "all 0.3s ease",
           }}
         >
           Handcrafted Haven
         </h1>
 
-        {/* NAV */}
-        <nav>
-          <ul
-            className="flex"
-            style={{
-              gap: "30px",
-              listStyle: "none",
-              fontWeight: "500",
-            }}
-          >
+        {/* NAV DESKTOP */}
+        <nav className="desktop-nav">
+          <ul className="flex" style={{ gap: "30px", listStyle: "none" }}>
             <li>
-              <Link href="/" className="nav-link">
-                Home
-              </Link>
+              <Link href="/" className="nav-link">Home</Link>
             </li>
             <li>
-              <Link href="/products" className="nav-link">
-                Products
-              </Link>
+              <Link href="/products" className="nav-link">Products</Link>
             </li>
             <li>
-              <Link href="#" className="nav-link">
-                About
-              </Link>
+              <Link href="#">About</Link>
             </li>
           </ul>
         </nav>
 
-        {/* ACTIONS */}
-        <div className="flex" style={{ gap: "15px", alignItems: "center" }}>
-          {/* ICONOS */}
-          <ShoppingCart
-            size={20}
-            style={{ cursor: "pointer", transition: "0.2s" }}
-          />
-          <User
-            size={20}
-            style={{ cursor: "pointer", transition: "0.2s" }}
-          />
+        {/* ACTIONS DESKTOP */}
+        <div className="desktop-actions flex" style={{ gap: "15px", alignItems: "center" }}>
+          <ShoppingCart size={20} />
+          <User size={20} />
+          <button className="btn-primary">Shop</button>
+        </div>
 
-          {/* CTA */}
-          <button
-            style={{
-              background: "var(--color-primary)",
-              color: "white",
-              padding: "8px 18px",
-              borderRadius: "999px",
-              fontWeight: "500",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-              transition: "all 0.3s ease",
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.transform = "scale(1.05)";
-              e.currentTarget.style.background = "var(--color-accent)";
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.transform = "scale(1)";
-              e.currentTarget.style.background = "var(--color-primary)";
-            }}
-          >
-            Shop
-          </button>
+        {/* MOBILE MENU BUTTON */}
+        <div className="mobile-menu-btn">
+          {menuOpen ? (
+            <X size={26} onClick={() => setMenuOpen(false)} />
+          ) : (
+            <Menu size={26} onClick={() => setMenuOpen(true)} />
+          )}
         </div>
       </div>
+
+      {/* MOBILE MENU */}
+      {menuOpen && (
+        <div className="mobile-menu">
+          <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link href="/products" onClick={() => setMenuOpen(false)}>Products</Link>
+          <Link href="#" onClick={() => setMenuOpen(false)}>About</Link>
+
+          <div style={{ marginTop: "20px" }}>
+            <button className="btn-primary">Shop</button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
