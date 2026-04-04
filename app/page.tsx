@@ -37,9 +37,11 @@ export default function Home() {
                 <button className="btn-primary">Shop Now</button>
               </Link>
 
-              <button className="btn-secondary">
-                Learn More
-              </button>
+              <Link href="/about">
+                <button className="btn-secondary">
+                  Learn More
+                </button>
+              </Link>
             </div>
           </div>
 

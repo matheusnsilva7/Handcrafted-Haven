@@ -4,9 +4,19 @@ import Link from "next/link";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const categories = [
+  { name: "Clay & Ceramics", slug: "ceramics" },
+  { name: "Jewelry", slug: "jewelry" },
+  { name: "Textiles", slug: "textiles" },
+  { name: "Woodcraft", slug: "wood" },
+  { name: "Scents", slug: "scents" },
+  { name: "Art", slug: "art" },
+];
+
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,11 +66,37 @@ export default function Header() {
             <li>
               <Link href="/" className="nav-link">Home</Link>
             </li>
-            <li>
-              <Link href="/products" className="nav-link">Products</Link>
+
+            {/* SHOP DROPDOWN */}
+            <li
+              className="dropdown"
+              onMouseEnter={() => setShopOpen(true)}
+              onMouseLeave={() => setShopOpen(false)}
+              style={{ position: "relative" }}
+            >
+              <span className="nav-link" style={{ cursor: "pointer" }}>
+                Shop ▾
+              </span>
+
+              {shopOpen && (
+                <ul className="dropdown-menu">
+                  {categories.map((cat) => (
+                    <li key={cat.slug}>
+                      <Link href={`/shop/${cat.slug}`}>
+                        {cat.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
+
             <li>
-              <Link href="#">About</Link>
+              <Link href="/makers" className="nav-link">Makers</Link>
+            </li>
+
+            <li>
+              <Link href="/about" className="nav-link">About</Link>
             </li>
           </ul>
         </nav>
@@ -69,7 +105,9 @@ export default function Header() {
         <div className="desktop-actions flex" style={{ gap: "15px", alignItems: "center" }}>
           <ShoppingCart size={20} />
           <User size={20} />
-          <button className="btn-primary">Shop</button>
+          <Link href="/shop">
+            <button className="btn-primary">Shop</button>
+          </Link>
         </div>
 
         {/* MOBILE MENU BUTTON */}
@@ -86,11 +124,29 @@ export default function Header() {
       {menuOpen && (
         <div className="mobile-menu">
           <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
-          <Link href="/products" onClick={() => setMenuOpen(false)}>Products</Link>
-          <Link href="#" onClick={() => setMenuOpen(false)}>About</Link>
+
+          <div>
+            <strong>Shop</strong>
+            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "10px" }}>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/shop/${cat.slug}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <Link href="/makers" onClick={() => setMenuOpen(false)}>Makers</Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
 
           <div style={{ marginTop: "20px" }}>
-            <button className="btn-primary">Shop</button>
+            <Link href="/shop">
+              <button className="btn-primary">Shop</button>
+            </Link>
           </div>
         </div>
       )}
