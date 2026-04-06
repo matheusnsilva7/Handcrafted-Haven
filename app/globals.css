@@ -850,3 +850,86 @@ footer ul li:hover {
   background: darkred;
   border-color: darkred;
 }
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 220px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.products-list,
+.maker-products,
+.featured-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.makers-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Makers */
+.makers-sections {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.maker-section {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.maker-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+/* Home Featured */
+.featured-artisans {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.featured-artisans .makers-sections {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+  .makers-sections,
+  .featured-artisans .makers-sections {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .makers-sections,
+  .featured-artisans .makers-sections {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
