@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { sampleProducts } from "./lib/sample-products";
+import ProductCard from "./components/ProductCard";
 
 export default function Home() {
   const [offset, setOffset] = useState(0);
@@ -33,14 +35,13 @@ export default function Home() {
             </p>
 
             <div className="hero-buttons fade-in fade-in-delay-2">
-              <Link href="/products">
+              {/* Shop Now redirige a Makers */}
+              <Link href="/makers">
                 <button className="btn-primary">Shop Now</button>
               </Link>
 
               <Link href="/about">
-                <button className="btn-secondary">
-                  Learn More
-                </button>
+                <button className="btn-secondary">Learn More</button>
               </Link>
             </div>
           </div>
@@ -59,6 +60,16 @@ export default function Home() {
             />
           </div>
 
+        </div>
+      </section>
+
+      {/* ARTESANOS DESTACADOS */}
+      <section className="featured-artisans">
+        <h2>Artesanos destacados</h2>
+        <div className="makers-sections">
+          {sampleProducts.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
         </div>
       </section>
     </main>

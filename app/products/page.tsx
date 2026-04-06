@@ -1,33 +1,52 @@
 import Link from "next/link";
+import { Product } from "../lib/types";
+import { sampleProducts } from "../lib/sample-products";
+import ProductCard from "../components/ProductCard";
 
 export default async function ProductsPage() {
-  const res = await fetch("http://localhost:3000/api/products", { cache: "no-store" });
-  const products = await res.json();
+  let products: Product[] = [];
+
+  try {
+    const res = await fetch("http://localhost:3000/api/products", { cache: "no-store" });
+    products = await res.json();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+  }
+
+  const featured: Product[] = sampleProducts.reduce((acc: Product[], product: Product) => {
+    if (!acc.find((p) => p.category === product.category)) {
+      acc.push(product);
+    }
+    return acc;
+  }, []);
 
   return (
     <div className="products-page">
-      <h1>My Products</h1>
-      <Link href="/products/create" className="btn-primary">Create Product</Link>
+      <h1>Handcrafted Haven</h1>
 
-      {products.length === 0 && <p>No products yet.</p>}
+      {/* Featured Products */}
+      <section className="featured-section">
+        <h2>Featured Products</h2>
+        <div className="featured-list">
+          {featured.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
 
-      <div className="products-list">
-        {products.map((p: any) => (
-          <div key={p.id} className="product-card">
-            <h3>{p.name}</h3>
-            <p>{p.description}</p>
-            <p>${p.price}</p>
-            <p><strong>Category:</strong> {p.category}</p>
-            <p><strong>Artisan:</strong> {p.artisan}</p>
-            {p.imageUrl && <img src={p.imageUrl} alt={p.name} />}
+      {/* My Products (API) */}
+      <section className="products-section">
+        <h2>My Products</h2>
+        <Link href="/products/create" className="btn-primary">Create Product</Link>
 
-            <div className="product-actions">
-              <Link href={`/products/${p.id}/edit`} className="action-button edit">Edit</Link>
-              <Link href={`/products/${p.id}/delete`} className="action-button delete">Delete</Link>
-            </div>
-          </div>
-        ))}
-      </div>
+        {products.length === 0 && <p>No products yet.</p>}
+
+        <div className="products-list">
+          {products.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
