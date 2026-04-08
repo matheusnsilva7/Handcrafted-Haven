@@ -4,19 +4,27 @@ import Link from "next/link";
 
 export default async function ItemsPage() {
   const { rows: items } = await sql`
-    SELECT items.id, items.title, items.description, items.price,
-           items.user_id,
-           users.name AS user_name, users.email
-    FROM items
-    JOIN users ON items.user_id = users.id
-    ORDER BY items.id DESC
-  `;
+  SELECT 
+    items.id,
+    items.title,
+    items.description,
+    items.price,
+    items.category,
+    items.image,
+    items.user_id,
+    users.name AS user_name,
+    users.email
+  FROM items
+  JOIN users ON items.user_id = users.id
+  ORDER BY items.id DESC
+`;
 
   const { rows: users } = await sql`
     SELECT id, name, email FROM users
     ORDER BY id DESC
   `;
 
+  console.log
   return (
     <div style={{ padding: "20px" }}>
       <Link href="/test">Home</Link> <br />
@@ -35,10 +43,21 @@ export default async function ItemsPage() {
             borderRadius: "8px",
           }}
         >
-          <h3>{item.title}</h3>
+          <h3>{item.name}</h3>
+
+          {item.image && (
+            <img
+              src={item.image}
+              alt={item.name}
+              style={{ width: "150px", borderRadius: "6px" }}
+            />
+          )}
+
           <p>{item.description}</p>
-          <p>ID= {item.id}</p>
+          <p>ID = {item.id}</p>
           <p>💲 {item.price}</p>
+
+          <p>📂 Category: {item.category}</p>
 
           <p>
             👤 Seller: <strong>{item.user_name}</strong>
