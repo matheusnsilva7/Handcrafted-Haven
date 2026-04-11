@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer
@@ -33,9 +35,10 @@ export default function Footer() {
           <div>
             <h3 style={{ marginBottom: "10px" }}>Explore</h3>
             <ul style={{ listStyle: "none", padding: 0 }}>
-              <li>Home</li>
-              <li>Products</li>
-              <li>About</li>
+              <li><Link href="/" className="nav-link">Home</Link></li>
+              <li><Link href="/shop" className="nav-link">Shop</Link></li>
+              <li><Link href="/makers" className="nav-link">Makers</Link></li>
+              <li><Link href="/about" className="nav-link">About</Link></li>
             </ul>
           </div>
 

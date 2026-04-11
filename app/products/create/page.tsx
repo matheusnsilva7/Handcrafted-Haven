@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function CreateProductPage() {
   const [imagesPreview, setImagesPreview] = useState<string[]>([]);
@@ -23,17 +23,23 @@ export default function CreateProductPage() {
 
     const formData = new FormData(e.currentTarget);
 
-    if (imagesPreview.length > 0) {
-      formData.append('imageUrl', imagesPreview[0]);
+    // 👇 convertir precio a número antes de enviar
+    const price = formData.get("price");
+    if (price) {
+      formData.set("price", String(Number(price)));
     }
 
-    await fetch('/api/products', {
-      method: 'POST',
+    if (imagesPreview.length > 0) {
+      formData.append("imageUrl", imagesPreview[0]);
+    }
+
+    await fetch("/api/products", {
+      method: "POST",
       body: formData,
     });
 
-    alert('Product created!');
-    router.push('/products');
+    alert("Product created!");
+    router.push("/products");
   }
 
   return (
@@ -49,7 +55,12 @@ export default function CreateProductPage() {
 
           <div className="create-product-field">
             <label>Price</label>
-            <input name="price" required className="create-product-input" />
+            <input
+              type="number" // 👈 ahora es numérico
+              name="price"
+              required
+              className="create-product-input"
+            />
           </div>
 
           <div className="create-product-field">
@@ -57,7 +68,6 @@ export default function CreateProductPage() {
             <textarea name="description" required className="create-product-textarea" />
           </div>
 
-          {/* CATEGORY */}
           <div className="create-product-field">
             <label>Category</label>
             <select name="category" required className="create-product-input">

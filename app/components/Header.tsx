@@ -3,29 +3,28 @@
 import Link from "next/link";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const categories = [
-  { name: "Clay & Ceramics", slug: "ceramics" },
-  { name: "Jewelry", slug: "jewelry" },
-  { name: "Textiles", slug: "textiles" },
-  { name: "Woodcraft", slug: "wood" },
-  { name: "Scents", slug: "scents" },
-  { name: "Art", slug: "art" },
-];
+import { useCart } from "../context/CartContext";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { cart, removeFromCart } = useCart();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // cada vez que cambia la ruta, cerramos el panel
+  useEffect(() => {
+    setCartOpen(false);
+  }, [pathname]);
 
   return (
     <header
@@ -63,47 +62,34 @@ export default function Header() {
         {/* NAV DESKTOP */}
         <nav className="desktop-nav">
           <ul className="flex" style={{ gap: "30px", listStyle: "none" }}>
-            <li>
-              <Link href="/" className="nav-link">Home</Link>
-            </li>
-
-            {/* SHOP DROPDOWN */}
-            <li
-              className="dropdown"
-              onMouseEnter={() => setShopOpen(true)}
-              onMouseLeave={() => setShopOpen(false)}
-              style={{ position: "relative" }}
-            >
-              <span className="nav-link" style={{ cursor: "pointer" }}>
-                Shop ▾
-              </span>
-
-              {shopOpen && (
-                <ul className="dropdown-menu">
-                  {categories.map((cat) => (
-                    <li key={cat.slug}>
-                      <Link href={`/shop/${cat.slug}`}>
-                        {cat.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-
-            <li>
-              <Link href="/makers" className="nav-link">Makers</Link>
-            </li>
-
-            <li>
-              <Link href="/about" className="nav-link">About</Link>
-            </li>
+            <li><Link href="/" className="nav-link">Home</Link></li>
+            <li><Link href="/shop" className="nav-link">Shop</Link></li>
+            <li><Link href="/makers" className="nav-link">Makers</Link></li>
+            <li><Link href="/about" className="nav-link">About</Link></li>
           </ul>
         </nav>
 
         {/* ACTIONS DESKTOP */}
         <div className="desktop-actions flex" style={{ gap: "15px", alignItems: "center" }}>
-          <ShoppingCart size={20} />
+          <div style={{ position: "relative", cursor: "pointer" }} onClick={() => setCartOpen(true)}>
+            <ShoppingCart size={20} />
+            {cart.length > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: -8,
+                  right: -8,
+                  background: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "2px 6px",
+                  fontSize: "0.75rem",
+                }}
+              >
+                {cart.length}
+              </span>
+            )}
+          </div>
           <User size={20} />
           <Link href="/shop">
             <button className="btn-primary">Shop</button>
@@ -124,22 +110,7 @@ export default function Header() {
       {menuOpen && (
         <div className="mobile-menu">
           <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
-
-          <div>
-            <strong>Shop</strong>
-            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "10px" }}>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  href={`/shop/${cat.slug}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
+          <Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
           <Link href="/makers" onClick={() => setMenuOpen(false)}>Makers</Link>
           <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
 
@@ -148,6 +119,84 @@ export default function Header() {
               <button className="btn-primary">Shop</button>
             </Link>
           </div>
+        </div>
+      )}
+
+      {/* OVERLAY OSCURO */}
+      {cartOpen && (
+        <div
+          onClick={() => setCartOpen(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.4)",
+            zIndex: 1500,
+          }}
+        />
+      )}
+
+      {/* MINI PANEL DE CARRITO */}
+      {cartOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            width: "300px",
+            height: "100%",
+            background: "#695c8e", 
+            color: "#333",
+            boxShadow: "-2px 0 12px rgba(0,0,0,0.3)", 
+            padding: "1rem",
+            zIndex: 2001,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <button
+            onClick={() => setCartOpen(false)}
+            style={{ alignSelf: "flex-end", marginBottom: "1rem" }}
+          >
+            <X size={20} />
+          </button>
+          <h2>Tu carrito</h2>
+          {cart.length === 0 ? (
+            <p>No hay productos en el carrito.</p>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {cart.map((item, idx) => (
+                <li
+                  key={idx}
+                  style={{
+                    marginBottom: "0.5rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>{item.name} - ${item.price}</span>
+                  <button
+                    onClick={() => removeFromCart(idx)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "red",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Link href="/checkout" onClick={() => setCartOpen(false)}>
+            <button className="btn-primary" style={{ marginTop: "auto" }}>
+              Ir a pagar
+            </button>
+          </Link>
         </div>
       )}
     </header>
