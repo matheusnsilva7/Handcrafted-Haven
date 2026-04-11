@@ -3,11 +3,14 @@ import { Product } from "../lib/types";
 import { sampleProducts } from "../lib/sample-products";
 import ProductCard from "../components/ProductCard";
 
+// página sea dinámica
+export const dynamic = "force-dynamic";
+
 export default async function ProductsPage() {
   let products: Product[] = [];
 
   try {
-    const res = await fetch("http://localhost:3000/api/products", { cache: "no-store" });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, { cache: "no-store" });
     products = await res.json();
   } catch (error) {
     console.error("Error fetching products:", error);
