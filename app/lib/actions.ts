@@ -62,9 +62,9 @@ export async function createItem(prevState: State, formData: FormData) {
     ${description},
     ${price},
     ${category},
-    ${user.name},
-    ${image},
-    ${image_url},
+    ${String(user.name)},
+    ${String(image)},
+    ${String(image_url)},
     ${Number(user.id)}
   )
 `;
@@ -101,14 +101,8 @@ export async function updateItem(formData: FormData) {
     };
   }
 
-  const {
-    title,
-    description,
-    price,
-    category,
-    image,
-    image_url,
-  } = validated.data;
+  const { title, description, price, category, image, image_url } =
+    validated.data;
 
   await sql`
     UPDATE items
@@ -117,8 +111,8 @@ export async function updateItem(formData: FormData) {
       description = ${description},
       price = ${price},
       category = ${category},
-      image = ${image},
-      image_url = ${image_url}
+      image = ${String(image)},
+      image_url = ${String(image_url)}
     WHERE id = ${Number(id)} AND user_id = ${Number(user.id)}
   `;
 
