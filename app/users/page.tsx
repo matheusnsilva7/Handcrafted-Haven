@@ -1,19 +1,14 @@
-import { Suspense } from 'react';
-import { Metadata } from 'next';
-import Form from '@/app/users/ui/create-user-form'
-export const metadata: Metadata = {
-  title: 'Invoices',
-};
+import { getCurrentUser } from "@/app/lib/auth";
+import { redirect } from "next/navigation";
+import { updateUser, deleteUser } from "@/app/lib/actions";
+import ProfilePage from "../ui/update-user-form";
 
-export default async function Page() {
-  return (
-    <main>
-      <div className="w-full">
-        <div className="flex w-full items-center justify-between">
-          <h1 className={`text-2xl`}>Create User</h1>
-        </div>
-        <Form/>
-      </div>
-    </main>
-  );
+export default async function user() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  return <ProfilePage user={user} />;
 }

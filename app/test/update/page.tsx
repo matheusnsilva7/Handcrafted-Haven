@@ -8,14 +8,14 @@ export default function UpdatePage() {
   const [message, setMessage] = useState("");
 
   async function handleUpdateUser(formData: FormData) {
-    const res = await updateUser({} as any, formData);
+    const res = await updateUser(formData);
     setMessage(res?.message || "✅ User updated!");
   }
 
   async function handleUpdateItem(formData: FormData) {
     const id = String(formData.get("id"));
 
-    const res = await updateItem(id, {} as any, formData);
+    const res = await updateItem(formData);
     setMessage(res?.message || "✅ Item updated!");
   }
 

@@ -1,97 +1,71 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useActionState } from "react";
+import { createItem } from "@/app/lib/actions";
+
+const initialState = {
+  message: "",
+  errors: {},
+};
 
 export default function CreateProductPage() {
-  const [imagesPreview, setImagesPreview] = useState<string[]>([]);
-  const router = useRouter();
-
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files;
-    if (!files) return;
-
-    const urls = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
-
-    setImagesPreview(urls);
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-
-    if (imagesPreview.length > 0) {
-      formData.append('imageUrl', imagesPreview[0]);
-    }
-
-    await fetch('/api/products', {
-      method: 'POST',
-      body: formData,
-    });
-
-    alert('Product created!');
-    router.push('/products');
-  }
+  const [state, formAction, pending] = useActionState(createItem, initialState);
 
   return (
     <div className="create-product-page">
       <div className="create-product-card">
-        <h1 className="create-product-title">Create Product</h1>
+        <h1>Create Product</h1>
 
-        <form onSubmit={handleSubmit} className="create-product-form">
-          <div className="create-product-field">
-            <label>Name</label>
-            <input name="name" required className="create-product-input" />
-          </div>
+        <form action={formAction} className="create-product-form">
+          <input
+            name="title"
+            placeholder="Title"
+            required
+            className="create-product-input"
+          />
 
-          <div className="create-product-field">
-            <label>Price</label>
-            <input name="price" required className="create-product-input" />
-          </div>
 
-          <div className="create-product-field">
-            <label>Description</label>
-            <textarea name="description" required className="create-product-textarea" />
-          </div>
+          <input
+            name="price"
+            type="number"
+            placeholder="Price"
+            required
+            className="create-product-input"
+          />
 
-          {/* CATEGORY */}
-          <div className="create-product-field">
-            <label>Category</label>
-            <select name="category" required className="create-product-input">
-              <option value="Clay & Ceramics">Clay & Ceramics</option>
-              <option value="Jewelry">Jewelry</option>
-              <option value="Textiles">Textiles</option>
-              <option value="Woodcraft">Woodcraft</option>
-              <option value="Scents">Scents</option>
-              <option value="Art">Art</option>
-            </select>
-          </div>
 
-          <div className="create-product-field">
-            <label>Images</label>
-            <input
-              type="file"
-              name="images"
-              multiple
-              accept="image/*"
-              onChange={handleImageChange}
-              required
-            />
-          </div>
+          <textarea
+            name="description"
+            placeholder="Description"
+            required
+            className="create-product-input"
+          />
 
-          <div className="create-product-preview">
-            {imagesPreview.map((src, i) => (
-              <div key={i} className="create-product-image-box">
-                <img src={src} className="create-product-image" />
-              </div>
-            ))}
-          </div>
+          <select name="category" required className="create-product-input">
+            <option value="Clay & Ceramics">Clay & Ceramics</option>
+            <option value="Jewelry">Jewelry</option>
+            <option value="Textiles">Textiles</option>
+            <option value="Woodcraft">Woodcraft</option>
+            <option value="Scents">Scents</option>
+            <option value="Art">Art</option>
+          </select>
 
-          <button type="submit" className="create-product-button">
-            Create Product
+          <input
+            name="image"
+            placeholder="/vase.jpg"
+            className="create-product-input"
+          />
+
+          <input
+            name="image_url"
+            placeholder="https://..."
+            className="create-product-input"
+          />
+
+          {state?.message && <p style={{ color: "red" }}>{state.message}</p>}
+
+          <button disabled={pending}>
+            {pending ? "Creating..." : "Create Product"}
           </button>
         </form>
       </div>
