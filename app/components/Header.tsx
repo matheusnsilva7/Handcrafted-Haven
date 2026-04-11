@@ -62,35 +62,57 @@ export default function Header() {
         {/* NAV DESKTOP */}
         <nav className="desktop-nav">
           <ul className="flex" style={{ gap: "30px", listStyle: "none" }}>
-            <li><Link href="/" className="nav-link">Home</Link></li>
-            <li><Link href="/shop" className="nav-link">Shop</Link></li>
-            <li><Link href="/makers" className="nav-link">Makers</Link></li>
-            <li><Link href="/about" className="nav-link">About</Link></li>
+            <li>
+              <Link href="/" className="nav-link">
+                Home
+              </Link>
+            </li>
+
+            {/* SHOP DROPDOWN */}
+            <li
+              className="dropdown"
+              onMouseEnter={() => setShopOpen(true)}
+              onMouseLeave={() => setShopOpen(false)}
+              style={{ position: "relative" }}
+            >
+              <span className="nav-link" style={{ cursor: "pointer" }}>
+                Shop ▾
+              </span>
+
+              {shopOpen && (
+                <ul className="dropdown-menu">
+                  {categories.map((cat) => (
+                    <li key={cat.slug}>
+                      <Link href={`/shop/${cat.slug}`}>{cat.name}</Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+
+            <li>
+              <Link href="/makers" className="nav-link">
+                Makers
+              </Link>
+            </li>
+
+            <li>
+              <Link href="/about" className="nav-link">
+                About
+              </Link>
+            </li>
           </ul>
         </nav>
 
         {/* ACTIONS DESKTOP */}
-        <div className="desktop-actions flex" style={{ gap: "15px", alignItems: "center" }}>
-          <div style={{ position: "relative", cursor: "pointer" }} onClick={() => setCartOpen(true)}>
-            <ShoppingCart size={20} />
-            {cart.length > 0 && (
-              <span
-                style={{
-                  position: "absolute",
-                  top: -8,
-                  right: -8,
-                  background: "red",
-                  color: "white",
-                  borderRadius: "50%",
-                  padding: "2px 6px",
-                  fontSize: "0.75rem",
-                }}
-              >
-                {cart.length}
-              </span>
-            )}
-          </div>
-          <User size={20} />
+        <div
+          className="desktop-actions flex"
+          style={{ gap: "15px", alignItems: "center" }}
+        >
+          <ShoppingCart size={20} />
+          <Link href="/login">
+            <User size={20} />
+          </Link>
           <Link href="/shop">
             <button className="btn-primary">Shop</button>
           </Link>
@@ -109,10 +131,38 @@ export default function Header() {
       {/* MOBILE MENU */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
-          <Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
-          <Link href="/makers" onClick={() => setMenuOpen(false)}>Makers</Link>
-          <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
+          <Link href="/" onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
+
+          <div>
+            <strong>Shop</strong>
+            <div
+              style={{
+                marginTop: "10px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              {categories.map((cat) => (
+                <Link
+                  key={cat.slug}
+                  href={`/shop/${cat.slug}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <Link href="/makers" onClick={() => setMenuOpen(false)}>
+            Makers
+          </Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)}>
+            About
+          </Link>
 
           <div style={{ marginTop: "20px" }}>
             <Link href="/shop">
