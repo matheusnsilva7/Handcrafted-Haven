@@ -15,7 +15,7 @@ export default function UpdatePage() {
   async function handleUpdateItem(formData: FormData) {
     const id = String(formData.get("id"));
 
-    const res = await updateItem(id, {} as any, formData);
+    const res = await updateItem(formData);
     setMessage(res?.message || "✅ Item updated!");
   }
 
