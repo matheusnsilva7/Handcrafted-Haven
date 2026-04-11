@@ -21,7 +21,7 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // cada vez que cambia la ruta, cerramos el panel
+  // cada vez que cambia la ruta, cerramos el panel del carrito
   useEffect(() => {
     setCartOpen(false);
   }, [pathname]);
@@ -67,35 +67,16 @@ export default function Header() {
                 Home
               </Link>
             </li>
-
-            {/* SHOP DROPDOWN */}
-            <li
-              className="dropdown"
-              onMouseEnter={() => setShopOpen(true)}
-              onMouseLeave={() => setShopOpen(false)}
-              style={{ position: "relative" }}
-            >
-              <span className="nav-link" style={{ cursor: "pointer" }}>
-                Shop ▾
-              </span>
-
-              {shopOpen && (
-                <ul className="dropdown-menu">
-                  {categories.map((cat) => (
-                    <li key={cat.slug}>
-                      <Link href={`/shop/${cat.slug}`}>{cat.name}</Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <li>
+              <Link href="/shop" className="nav-link">
+                Shop
+              </Link>
             </li>
-
             <li>
               <Link href="/makers" className="nav-link">
                 Makers
               </Link>
             </li>
-
             <li>
               <Link href="/about" className="nav-link">
                 About
@@ -109,7 +90,32 @@ export default function Header() {
           className="desktop-actions flex"
           style={{ gap: "15px", alignItems: "center" }}
         >
-          <ShoppingCart size={20} />
+          {/* Carrito con badge rojo */}
+          <div style={{ position: "relative" }}>
+            <ShoppingCart
+              size={20}
+              style={{ cursor: "pointer" }}
+              onClick={() => setCartOpen(true)}
+            />
+            {cart.length > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: -6,
+                  right: -6,
+                  background: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  fontSize: "0.7rem",
+                  padding: "2px 6px",
+                  fontWeight: "bold",
+                }}
+              >
+                {cart.length}
+              </span>
+            )}
+          </div>
+
           <Link href="/login">
             <User size={20} />
           </Link>
@@ -134,36 +140,15 @@ export default function Header() {
           <Link href="/" onClick={() => setMenuOpen(false)}>
             Home
           </Link>
-
-          <div>
-            <strong>Shop</strong>
-            <div
-              style={{
-                marginTop: "10px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              {categories.map((cat) => (
-                <Link
-                  key={cat.slug}
-                  href={`/shop/${cat.slug}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {cat.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
+          <Link href="/shop" onClick={() => setMenuOpen(false)}>
+            Shop
+          </Link>
           <Link href="/makers" onClick={() => setMenuOpen(false)}>
             Makers
           </Link>
           <Link href="/about" onClick={() => setMenuOpen(false)}>
             About
           </Link>
-
           <div style={{ marginTop: "20px" }}>
             <Link href="/shop">
               <button className="btn-primary">Shop</button>
@@ -197,9 +182,9 @@ export default function Header() {
             right: 0,
             width: "300px",
             height: "100%",
-            background: "#695c8e", 
+            background: "#695c8e",
             color: "#333",
-            boxShadow: "-2px 0 12px rgba(0,0,0,0.3)", 
+            boxShadow: "-2px 0 12px rgba(0,0,0,0.3)",
             padding: "1rem",
             zIndex: 2001,
             display: "flex",
@@ -226,7 +211,9 @@ export default function Header() {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span>{item.name} - ${item.price}</span>
+                  <span>
+                    {item.name} - ${item.price}
+                  </span>
                   <button
                     onClick={() => removeFromCart(idx)}
                     style={{
