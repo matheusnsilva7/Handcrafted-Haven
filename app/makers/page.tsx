@@ -3,11 +3,14 @@ import { sampleProducts } from "../lib/sample-products";
 import ProductCard from "../components/ProductCard";
 import Link from "next/link";
 
+// 👇 fuerza a que la página sea dinámica
+export const dynamic = "force-dynamic";
+
 export default async function MakersPage() {
   let products: Product[] = [];
 
   try {
-    const res = await fetch("http://localhost:3000/api/products", { cache: "no-store" });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products`, { cache: "no-store" });
     products = await res.json();
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -16,7 +19,7 @@ export default async function MakersPage() {
   // Mezclar productos reales con los de ejemplo
   products = [...products, ...sampleProducts];
 
-  // Agrupar por artesano (con valor por defecto si falta)
+  // Agrupar por artesano
   const artesanos: Record<string, Product[]> = {};
   products.forEach((p) => {
     const key = p.artisan ?? "Sin artesano";
@@ -30,7 +33,6 @@ export default async function MakersPage() {
         <h1>Explora los artesanos y sus productos</h1>
         <p>Descubre piezas únicas creadas con pasión y dedicación.</p>
 
-        {/* Botón para crear producto */}
         <div className="makers-actions">
           <Link href="/products/create">
             <button className="create-product-button">Crear producto</button>

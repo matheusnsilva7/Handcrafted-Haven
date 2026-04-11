@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { sampleProducts } from "../../../../lib/sample-products";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
-  const body = await req.json(); // { user, stars, comment }
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  const { id } = await context.params; // 👈 importante: await porque params es Promise
+  const body = await request.json(); // { user, stars, comment }
 
   const product = sampleProducts.find((p) => p.id === id);
   if (!product) {
