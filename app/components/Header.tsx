@@ -3,29 +3,28 @@
 import Link from "next/link";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const categories = [
-  { name: "Clay & Ceramics", slug: "ceramics" },
-  { name: "Jewelry", slug: "jewelry" },
-  { name: "Textiles", slug: "textiles" },
-  { name: "Woodcraft", slug: "wood" },
-  { name: "Scents", slug: "scents" },
-  { name: "Art", slug: "art" },
-];
+import { useCart } from "../context/CartContext";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { cart, removeFromCart } = useCart();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // cada vez que cambia la ruta, cerramos el panel
+  useEffect(() => {
+    setCartOpen(false);
+  }, [pathname]);
 
   return (
     <header
@@ -170,6 +169,84 @@ export default function Header() {
               <button className="btn-primary">Shop</button>
             </Link>
           </div>
+        </div>
+      )}
+
+      {/* OVERLAY OSCURO */}
+      {cartOpen && (
+        <div
+          onClick={() => setCartOpen(false)}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0,0,0,0.4)",
+            zIndex: 1500,
+          }}
+        />
+      )}
+
+      {/* MINI PANEL DE CARRITO */}
+      {cartOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            right: 0,
+            width: "300px",
+            height: "100%",
+            background: "#695c8e", 
+            color: "#333",
+            boxShadow: "-2px 0 12px rgba(0,0,0,0.3)", 
+            padding: "1rem",
+            zIndex: 2001,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <button
+            onClick={() => setCartOpen(false)}
+            style={{ alignSelf: "flex-end", marginBottom: "1rem" }}
+          >
+            <X size={20} />
+          </button>
+          <h2>Tu carrito</h2>
+          {cart.length === 0 ? (
+            <p>No hay productos en el carrito.</p>
+          ) : (
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {cart.map((item, idx) => (
+                <li
+                  key={idx}
+                  style={{
+                    marginBottom: "0.5rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span>{item.name} - ${item.price}</span>
+                  <button
+                    onClick={() => removeFromCart(idx)}
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "red",
+                      cursor: "pointer",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          <Link href="/checkout" onClick={() => setCartOpen(false)}>
+            <button className="btn-primary" style={{ marginTop: "auto" }}>
+              Ir a pagar
+            </button>
+          </Link>
         </div>
       )}
     </header>

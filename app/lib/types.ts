@@ -1,10 +1,16 @@
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: number;
   category: string;
   artisan?: string;
-  image?: string;     // para productos de ejemplo
-  imageUrl?: string;  // para productos reales de la API
+  image?: string;
+  imageUrl?: string;
+  rating?: number;   // promedio de estrellas (ej. 4.5)
+  reviews?: {        // lista de reseñas
+    user: string;
+    comment: string;
+    stars: number;
+  }[];
 }

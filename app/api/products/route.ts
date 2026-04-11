@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     name: formData.get("name"),
     price: formData.get("price"),
     description: formData.get("description"),
-    category: formData.get("category"),
+    category: formData.get("category") ?? "Uncategorized", // 👈 valor por defecto
     imageUrl: formData.get("imageUrl"),
     artisan: "Artesano Demo",
   };
