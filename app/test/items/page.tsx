@@ -24,7 +24,6 @@ export default async function ItemsPage() {
     ORDER BY id DESC
   `;
 
-  console.log
   return (
     <div style={{ padding: "20px" }}>
       <Link href="/test">Home</Link> <br />

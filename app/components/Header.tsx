@@ -64,7 +64,9 @@ export default function Header() {
         <nav className="desktop-nav">
           <ul className="flex" style={{ gap: "30px", listStyle: "none" }}>
             <li>
-              <Link href="/" className="nav-link">Home</Link>
+              <Link href="/" className="nav-link">
+                Home
+              </Link>
             </li>
 
             {/* SHOP DROPDOWN */}
@@ -82,9 +84,7 @@ export default function Header() {
                 <ul className="dropdown-menu">
                   {categories.map((cat) => (
                     <li key={cat.slug}>
-                      <Link href={`/shop/${cat.slug}`}>
-                        {cat.name}
-                      </Link>
+                      <Link href={`/shop/${cat.slug}`}>{cat.name}</Link>
                     </li>
                   ))}
                 </ul>
@@ -92,19 +92,28 @@ export default function Header() {
             </li>
 
             <li>
-              <Link href="/makers" className="nav-link">Makers</Link>
+              <Link href="/makers" className="nav-link">
+                Makers
+              </Link>
             </li>
 
             <li>
-              <Link href="/about" className="nav-link">About</Link>
+              <Link href="/about" className="nav-link">
+                About
+              </Link>
             </li>
           </ul>
         </nav>
 
         {/* ACTIONS DESKTOP */}
-        <div className="desktop-actions flex" style={{ gap: "15px", alignItems: "center" }}>
+        <div
+          className="desktop-actions flex"
+          style={{ gap: "15px", alignItems: "center" }}
+        >
           <ShoppingCart size={20} />
-          <User size={20} />
+          <Link href="/login">
+            <User size={20} />
+          </Link>
           <Link href="/shop">
             <button className="btn-primary">Shop</button>
           </Link>
@@ -123,11 +132,20 @@ export default function Header() {
       {/* MOBILE MENU */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link href="/" onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
 
           <div>
             <strong>Shop</strong>
-            <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "10px" }}>
+            <div
+              style={{
+                marginTop: "10px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
               {categories.map((cat) => (
                 <Link
                   key={cat.slug}
@@ -140,8 +158,12 @@ export default function Header() {
             </div>
           </div>
 
-          <Link href="/makers" onClick={() => setMenuOpen(false)}>Makers</Link>
-          <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
+          <Link href="/makers" onClick={() => setMenuOpen(false)}>
+            Makers
+          </Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)}>
+            About
+          </Link>
 
           <div style={{ marginTop: "20px" }}>
             <Link href="/shop">
