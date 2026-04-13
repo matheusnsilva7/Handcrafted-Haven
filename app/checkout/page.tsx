@@ -7,12 +7,12 @@ export default function CheckoutPage() {
   const { cart, removeFromCart, clearCart } = useCart();
   const [paid, setPaid] = useState(false);
 
-  // 👇 convertir siempre a número
+  // convertir siempre a número
   const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
 
   const handlePayment = () => {
     setPaid(true);
-    clearCart(); // 👈 vacía el carrito al finalizar compra
+    clearCart(); // vacía el carrito al finalizar compra
   };
 
   if (paid) {
@@ -49,7 +49,7 @@ export default function CheckoutPage() {
                 <button
                   onClick={() => removeFromCart(idx)}
                   style={{
-                    background: "transparent",
+                    background: "white",
                     border: "none",
                     color: "red",
                     cursor: "pointer",

@@ -4,7 +4,7 @@ export const sampleProducts: Product[] = [
   {
     id: "1",
     name: "Handmade Ceramic Vase",
-    description: "This ceramic vase is carefully hand-shaped...",
+    description: "This ceramic vase is carefully hand-shaped by skilled artisans, giving each piece a unique character. The smooth surface and natural tones highlight the craftsmanship and attention to detail. Its timeless design makes it perfect for both modern and traditional interiors. Beyond decoration, it reflects the artistry and cultural heritage of handmade ceramics.",
     price: 45,
     image: "/vase.jpg",
     category: "Clay & Ceramics",
