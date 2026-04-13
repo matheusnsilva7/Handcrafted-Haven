@@ -21,7 +21,6 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // cada vez que cambia la ruta, cerramos el panel del carrito
   useEffect(() => {
     setCartOpen(false);
   }, [pathname]);
@@ -48,7 +47,6 @@ export default function Header() {
           height: scrolled ? "65px" : "80px",
         }}
       >
-        {/* LOGO */}
         <h1
           style={{
             fontSize: "1.5rem",
@@ -59,38 +57,16 @@ export default function Header() {
           Handcrafted Haven
         </h1>
 
-        {/* NAV DESKTOP */}
         <nav className="desktop-nav">
           <ul className="flex" style={{ gap: "30px", listStyle: "none" }}>
-            <li>
-              <Link href="/" className="nav-link">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link href="/shop" className="nav-link">
-                Shop
-              </Link>
-            </li>
-            <li>
-              <Link href="/makers" className="nav-link">
-                Makers
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="nav-link">
-                About
-              </Link>
-            </li>
+            <li><Link href="/" className="nav-link">Home</Link></li>
+            <li><Link href="/shop" className="nav-link">Shop</Link></li>
+            <li><Link href="/makers" className="nav-link">Makers</Link></li>
+            <li><Link href="/about" className="nav-link">About</Link></li>
           </ul>
         </nav>
 
-        {/* ACTIONS DESKTOP */}
-        <div
-          className="desktop-actions flex"
-          style={{ gap: "15px", alignItems: "center" }}
-        >
-          {/* Carrito con badge rojo */}
+        <div className="desktop-actions flex" style={{ gap: "15px", alignItems: "center" }}>
           <div style={{ position: "relative" }}>
             <ShoppingCart
               size={20}
@@ -116,15 +92,10 @@ export default function Header() {
             )}
           </div>
 
-          <Link href="/login">
-            <User size={20} />
-          </Link>
-          <Link href="/shop">
-            <button className="btn-primary">Shop</button>
-          </Link>
+          <Link href="/login"><User size={20} /></Link>
+          <Link href="/shop"><button className="btn-primary">Shop</button></Link>
         </div>
 
-        {/* MOBILE MENU BUTTON */}
         <div className="mobile-menu-btn">
           {menuOpen ? (
             <X size={26} onClick={() => setMenuOpen(false)} />
@@ -134,30 +105,18 @@ export default function Header() {
         </div>
       </div>
 
-      {/* MOBILE MENU */}
       {menuOpen && (
         <div className="mobile-menu">
-          <Link href="/" onClick={() => setMenuOpen(false)}>
-            Home
-          </Link>
-          <Link href="/shop" onClick={() => setMenuOpen(false)}>
-            Shop
-          </Link>
-          <Link href="/makers" onClick={() => setMenuOpen(false)}>
-            Makers
-          </Link>
-          <Link href="/about" onClick={() => setMenuOpen(false)}>
-            About
-          </Link>
+          <Link href="/" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link href="/shop" onClick={() => setMenuOpen(false)}>Shop</Link>
+          <Link href="/makers" onClick={() => setMenuOpen(false)}>Makers</Link>
+          <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
           <div style={{ marginTop: "20px" }}>
-            <Link href="/shop">
-              <button className="btn-primary">Shop</button>
-            </Link>
+            <Link href="/shop"><button className="btn-primary">Shop</button></Link>
           </div>
         </div>
       )}
 
-      {/* OVERLAY OSCURO */}
       {cartOpen && (
         <div
           onClick={() => setCartOpen(false)}
@@ -173,7 +132,6 @@ export default function Header() {
         />
       )}
 
-      {/* MINI PANEL DE CARRITO */}
       {cartOpen && (
         <div
           style={{
@@ -182,7 +140,7 @@ export default function Header() {
             right: 0,
             width: "300px",
             height: "100%",
-            background: "#695c8e",
+            background: "#fff", 
             color: "#333",
             boxShadow: "-2px 0 12px rgba(0,0,0,0.3)",
             padding: "1rem",
@@ -197,9 +155,9 @@ export default function Header() {
           >
             <X size={20} />
           </button>
-          <h2>Tu carrito</h2>
+          <h2>Shopping cart</h2>
           {cart.length === 0 ? (
-            <p>No hay productos en el carrito.</p>
+            <p>There are no products in the cart</p>
           ) : (
             <ul style={{ listStyle: "none", padding: 0 }}>
               {cart.map((item, idx) => (
@@ -209,18 +167,21 @@ export default function Header() {
                     marginBottom: "0.5rem",
                     display: "flex",
                     justifyContent: "space-between",
+                    background: "#f9f9f9", 
+                    padding: "0.5rem",
+                    borderRadius: "6px",
                   }}
                 >
-                  <span>
-                    {item.name} - ${item.price}
-                  </span>
+                  <span>{item.name} - ${item.price}</span>
                   <button
                     onClick={() => removeFromCart(idx)}
                     style={{
-                      background: "transparent",
-                      border: "none",
+                      background: "#fff", 
+                      border: "1px solid #ccc",
+                      borderRadius: "4px",
                       color: "red",
                       cursor: "pointer",
+                      padding: "2px 6px",
                     }}
                   >
                     ✕
@@ -231,7 +192,7 @@ export default function Header() {
           )}
           <Link href="/checkout" onClick={() => setCartOpen(false)}>
             <button className="btn-primary" style={{ marginTop: "auto" }}>
-              Ir a pagar
+              Go to pay
             </button>
           </Link>
         </div>

@@ -30,17 +30,17 @@ export default async function MakersPage() {
   return (
     <div className="makers-page">
       <div className="makers-header">
-        <h1>Explora los artesanos y sus productos</h1>
-        <p>Descubre piezas únicas creadas con pasión y dedicación.</p>
+        <h1>Explore the artisans and their products</h1>
+        <p>Discover unique pieces created with passion and dedication</p>
 
         <div className="makers-actions">
           <Link href="/products/create">
-            <button className="create-product-button">Crear producto</button>
+            <button className="create-product-button">Create product</button>
           </Link>
         </div>
       </div>
 
-      {Object.keys(artesanos).length === 0 && <p>No hay artesanos aún.</p>}
+      {Object.keys(artesanos).length === 0 && <p>There are no artisans yet</p>}
 
       <div className="makers-sections">
         {Object.entries(artesanos).map(([artesano, items]) => (

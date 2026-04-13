@@ -885,7 +885,7 @@ footer ul li:hover {
   gap: 2rem;
 }
 
-/* Makers */
+/* Makers base */
 .makers-sections {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -920,16 +920,102 @@ footer ul li:hover {
 }
 
 /* Responsivo */
-@media (max-width: 1024px) {
+@media (max-width: 1030px) {
+  .hero-content,
+  .about-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* ✅ corregido: coma añadida */
   .makers-sections,
-  .featured-artisans .makers-sections {
+  .featured-artisans .makers-sections,
+  .maker-products {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  h1 {
+    font-size: 2.4rem;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .desktop-nav,
+  .desktop-actions {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .products-list,
+  .maker-products {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-card,
+  .maker-card {
+    width: 100%;
+    max-width: 400px; /* ✅ evita que se corten */
+  }
+
   .makers-sections,
   .featured-artisans .makers-sections {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+@media (max-width: 490px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero {
+    padding: 40px 0;
+  }
+
+  .hero-text p,
+  .about-hero p {
+    font-size: 1rem;
+  }
+
+  .create-product-card,
+  .edit-product-card,
+  .delete-product-card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .action-button,
+  .create-product-button,
+  .edit-product-button,
+  .delete-product-button {
+    width: 100%;
+  }
+
+  .maker-card {
+    width: 100%; /* ✅ ocupa todo el ancho en móviles */
+  }
+
+  .makers-sections,
+  .featured-artisans .makers-sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+
