@@ -120,21 +120,24 @@ export async function updateItem(formData: FormData) {
   redirect("/dashboard");
 }
 
-export async function deleteItem(id: string) {
-  const userId = await getCurrentUser();
+export async function deleteItem(formData: FormData): Promise<void> {
+  const user = await getCurrentUser();
+  if (!user) return;
 
-  if (!userId) return { message: "Not authenticated" };
+  const id = String(formData.get("id")); // el id viene del input hidden
 
   try {
     await sql`
-    DELETE FROM items
-    WHERE id = ${id} AND user_id = ${Number(userId.id)}
-  `;
+      DELETE FROM items
+      WHERE id = ${id} AND user_id = ${Number(user.id)}
+    `;
   } catch (e) {
-    return { message: "Database error" };
+    // si hay error, simplemente no devolvemos nada
+    return;
   }
 
-  revalidatePath("/dashboard");
+  // refresca la lista de items en la ruta correspondiente
+  revalidatePath("/test/items");
 }
 
 export async function registerUser(prevState: State, formData: FormData) {
