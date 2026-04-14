@@ -78,10 +78,8 @@ export default async function ItemsPage() {
             👤 Seller: <strong>{item.user_name}</strong>
           </p>
 
-          <form action={actions.deleteItem}>
             <input type="hidden" name="id" value={item.id} />
             <button type="submit">❌ Delete Item</button>
-          </form>
         </div>
       ))}
       <hr />
